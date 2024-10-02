@@ -1,8 +1,11 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
+    alias(libs.plugins.jetbrains.kotlin.jvm) apply false
     alias(libs.plugins.hilt)
     alias(libs.plugins.kapt)
+    alias(libs.plugins.detekt)
+
     id("io.sentry.android.gradle") version "4.11.0"
 }
 
@@ -53,14 +56,15 @@ android {
 }
 
 dependencies {
+    implementation(libs.androidx.ui.text.google.fonts)
 
     implementation(libs.hilt)
     kapt(libs.hilt.compiler)
 
-    androidTestImplementation(libs.hilt.test)
+    androidTestImplementation(libs.hilt.testing)
     kaptAndroidTest(libs.hilt.compiler)
 
-    testImplementation(libs.hilt.test)
+    testImplementation(libs.hilt.testing)
     kaptAndroidTest(libs.hilt.compiler)
 
     implementation(libs.androidx.core.ktx)
@@ -80,6 +84,8 @@ dependencies {
     debugImplementation(libs.androidx.ui.test.manifest)
     implementation(libs.myretrofit)
     implementation(libs.sentry.android)
+    implementation(project(":core:network"))
+    implementation(libs.coil)
 }
 
 kapt{
@@ -93,4 +99,7 @@ sentry {
     // this will upload your source code to Sentry to show it as part of the stack traces
     // disable if you don't want to expose your sources
     includeSourceContext.set(true)
+}
+detekt{
+    parallel = true
 }
